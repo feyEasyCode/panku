@@ -2,7 +2,6 @@ package com.panku.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.concurrent.TimeUnit;
  * @author: uaike
  * @create: 2021-03-11
  */
-@Service
 public class RedisUtils {
 
     @Autowired

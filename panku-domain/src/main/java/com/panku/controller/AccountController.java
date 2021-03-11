@@ -34,7 +34,6 @@ public class AccountController {
             return ResultResponse.success(customer);
         }
         return ResultResponse.error(1,"获取用户信息异常，登录失败");
-
     }
 
 
