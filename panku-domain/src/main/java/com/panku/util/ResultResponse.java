@@ -37,15 +37,15 @@ public class ResultResponse implements Serializable {
         this.data = data;
     }
 
-    public static ResultResponse ok(){
+    public static ResultResponse success(){
         return new ResultResponse(ResultEnum.SUCCESS.getCode(), ResultEnum.SUCCESS.getMessage(), null);
     }
 
-    public static ResultResponse ok(String message, Object data){
+    public static ResultResponse success(String message, Object data){
         return new ResultResponse(ResultEnum.SUCCESS.getCode(), message, data);
     }
 
-    public static ResultResponse ok(Object data){
+    public static ResultResponse success(Object data){
         return new ResultResponse(ResultEnum.SUCCESS.getCode(), ResultEnum.SUCCESS.getMessage(), data);
     }
 
@@ -56,7 +56,7 @@ public class ResultResponse implements Serializable {
 
     public static ResultResponse error(Integer code, String message){
         log.info("接口返回数据异常：code={}，message={}", code, message);
-        return new ResultResponse(code, ResultEnum.SUCCESS.getMessage(), null);
+        return new ResultResponse(code, message, null);
     }
 
     public static ResultResponse error(ResultEnum resultEnum){

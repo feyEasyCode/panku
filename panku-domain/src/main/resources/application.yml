@@ -12,6 +12,19 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
+  redis:
+    host: 127.0.0.1
+    port: 6379
+#    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+    lettuce:
+      shutdown-timeout: 0
+
 mybatis:
   mapper-locations:  classpath*:mapper/*Mapper.xml,classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
   type-aliases-package: com.panku.entity

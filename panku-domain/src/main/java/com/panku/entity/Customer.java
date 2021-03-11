@@ -42,7 +42,7 @@ public class Customer {
     private String email;
 
     @Column(comment = "地址")
-    private String adress;
+    private String address;
 
     @Column(comment = "性别")
     private String gender;
