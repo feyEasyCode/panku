@@ -7,6 +7,8 @@ package com.panku.service.redis;
  */
 public interface RedisService {
 
+    void getTokenData();
+
     /**
      * 保存key-value 到redis
      * @param key
