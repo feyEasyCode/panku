@@ -1,5 +1,6 @@
 package com.panku.controller;
 
+import com.panku.config.Authorization;
 import com.panku.dto.account.request.AccountRequestDTO;
 import com.panku.dto.redis.RedisUserInfoDTO;
 import com.panku.entity.Customer;
@@ -31,6 +32,7 @@ public class AccountController {
     @Autowired
     private RedisService redisService;
 
+    @Authorization
     @PostMapping("/loginPhAndPwd")
     public ResultResponse login(@RequestBody AccountRequestDTO requestDTO){
         Customer customer = userService.loginPhAndPwd(requestDTO);
