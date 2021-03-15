@@ -1,12 +1,10 @@
 package com.panku.controller;
 
-import com.panku.config.Authorization;
 import com.panku.dto.BaseRequestDTO;
 import com.panku.dto.TokenResponseDTO;
 import com.panku.service.redis.RedisService;
 import com.panku.util.JwtUtils;
 import com.panku.util.ResultResponse;
-import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +31,6 @@ public class BaseController {
     private static final String REDIS_PREFIX = "jwtToken:";
     private static final long TOKEN_EXPIRED_TIME = 1800L;
 
-    @Authorization
     @PostMapping("/getToken")
     public ResultResponse getToken(@RequestBody BaseRequestDTO requestDTO){
         TokenResponseDTO responseDTO = new TokenResponseDTO();
