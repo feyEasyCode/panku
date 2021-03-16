@@ -1,5 +1,12 @@
 package com.panku.service.redis;
 
+import com.panku.constant.CommonConstants;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @description:
  * @author: uaike
@@ -7,8 +14,7 @@ package com.panku.service.redis;
  */
 public interface RedisService {
 
-    void getTokenData();
-
+    boolean validateJWT();
     /**
      * 保存key-value 到redis
      * @param key

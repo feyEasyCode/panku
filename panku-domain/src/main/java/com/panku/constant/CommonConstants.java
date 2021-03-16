@@ -9,9 +9,13 @@ public interface CommonConstants {
 
     interface JWT {
 
-        String JSESSIONID = "jsessionId";
+        String JWT_ID = "jwt";
 
         String REDISPREFIX = "redis_Prefix:";
     }
 
+    interface REDIS {
+        //jwt redis
+        String REDIS_TOKEN_PREFIX = "jwtToken:";
+    }
 }
