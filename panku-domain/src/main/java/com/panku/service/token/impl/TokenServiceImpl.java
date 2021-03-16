@@ -1,14 +1,23 @@
-package com.panku.util;
+package com.panku.service.token.impl;
 
+import com.panku.constant.CommonConstants;
+import com.panku.service.token.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,21 +25,22 @@ import java.util.Map;
 /**
  * @description:
  * @author: uaike
- * @create: 2021-03-11
+ * @create: 2021-03-16
  */
+@Service
 @Slf4j
-public class JwtUtils {
+public class TokenServiceImpl  implements TokenService {
 
     private static final String JWT_SECRET = "RxrrO92uvk7S65M3IDlrOZrzoPce0hfM";
 
     private static final Long JWT_EXPIRED = 1800000L;
 
-    /**
-     * 创建jwt
-     * @return
-     * @throws Exception
-     */
-    public static String createJWT(String token, String userId) throws Exception {
+    @Resource
+    private RedisTemplate redisTemplate;
+
+
+    @Override
+    public String createJWT(String token, String userId) {
         // 指定签名的时候使用的签名算法，也就是header那部分，jjwt已经将这部分内容封装好了。
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         // 生成JWT的时间
@@ -39,7 +49,6 @@ public class JwtUtils {
         // 创建payload的私有声明（根据特定的业务需要添加，如果要拿这个做验证，一般是需要和jwt的接收方提前沟通好验证方式的）
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
-        claims.put("jwtToken", token);
         // 生成签名的时候使用的秘钥secret，切记这个秘钥不能外露哦。它就是你服务端的私钥，在任何场景都不应该流露出去。
         // 一旦客户端得知这个secret, 那就意味着客户端是可以自我签发jwt了。
         SecretKey key = generalKey();
@@ -65,13 +74,58 @@ public class JwtUtils {
     }
 
     /**
-     * 解密jwt
+     * 验证JWT
+     *
+     * @return
+     */
+    @Override
+    public boolean validateJWT() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        boolean validateJWT = false;
+        if(StringUtils.isNotEmpty(request.getHeader(CommonConstants.JWT.JWT_ID))){
+            String jwt = String.valueOf(request.getHeader(CommonConstants.JWT.JWT_ID));
+            log.info("getJwtToken jwt:"+jwt);
+            this.validateJWT(jwt);
+            Claims claims = null;
+            try {
+                claims = parserJWT(jwt);
+                String jwtToken =  claims.get("jwtToken").toString();
+                log.info(">>>>>>>>validateJWT >>>>>>::" + jwtToken);
+                String redisKey = CommonConstants.REDIS.REDIS_TOKEN_PREFIX + jwtToken;
+                if (redisTemplate.hasKey(redisKey)){
+                    return true;
+                }
+            } catch (Exception e) {
+                log.error("JWTUtil getValue error:"+e.getMessage());
+            }
+        }
+        return validateJWT;
+    }
+
+    @Override
+    public boolean validateJWT(String jwtStr) {
+        boolean flag=false;
+        Claims claims = null;
+        try {
+            claims = parserJWT(jwtStr);
+            String jwtToken =  claims.get("jwtToken").toString();
+            log.info(">>>>>>>>validateJWT >>>>>>::" + jwtToken);
+            if (redisTemplate.hasKey(jwtToken)){
+                return true;
+            }
+        } catch (Exception e) {
+            log.error("validate JWT error", e);
+        }
+        return flag;
+    }
+
+    /**
+     * 验证JWT
      *
      * @param jwt
      * @return
-     * @throws Exception
      */
-    public static Claims parserJWT(String jwt) {
+    private Claims parserJWT(String jwt) {
         //签名秘钥，和生成的签名的秘钥一模一样
         SecretKey key = generalKey();
         log.info(">>>>>>>KEY>>>>>" + key);
@@ -82,12 +136,13 @@ public class JwtUtils {
                 .parseClaimsJws(jwt).getBody();
     }
 
+
     /**
      * 由字符串生成加密key
      *
      * @return
      */
-    public static SecretKey generalKey() {
+    private SecretKey generalKey() {
         String stringKey = JWT_SECRET;
         // 本地的密码解码
         byte[] encodedKey = Base64.decodeBase64(stringKey);
