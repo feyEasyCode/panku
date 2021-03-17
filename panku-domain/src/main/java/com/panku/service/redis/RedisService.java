@@ -1,11 +1,6 @@
 package com.panku.service.redis;
 
-import com.panku.constant.CommonConstants;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
+import com.panku.dto.redis.RedisUserInfoDTO;
 
 /**
  * @description:
@@ -13,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
  * @create: 2021-03-11
  */
 public interface RedisService {
+
+    boolean saveJwt(String jwtToken);
 
     boolean validateJWT();
     /**
@@ -32,4 +29,15 @@ public interface RedisService {
      */
     boolean saveDataAndSetExpire(String key, Object value, Long expireTime);
 
+    /**
+     * 保存用户信息到redis
+     * @param userInfoDTO
+     * @return
+     */
+    boolean saveUserInfo(RedisUserInfoDTO userInfoDTO);
+
+    /**
+     * 从redis获取用户信息
+     */
+    RedisUserInfoDTO getUserInfoByRedis();
 }

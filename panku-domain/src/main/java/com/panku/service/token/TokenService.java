@@ -13,4 +13,6 @@ public interface TokenService {
 
     boolean validateJWT(String jwtStr);
 
+    String getToken();
+
 }

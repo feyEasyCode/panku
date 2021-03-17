@@ -31,4 +31,7 @@ public interface UserMapper {
     @Select("SELECT * FROM users Where mobile=#{userId} AND pass_word=#{passWord}")
     List<Customer> queryUser(String userId, String passWord);
 
+    @Select("SELECT * FROM users Where mobile=#{userId}")
+    List<Customer> queryUserInfo(String userId);
+
 }

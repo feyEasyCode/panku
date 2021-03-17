@@ -17,4 +17,16 @@ public interface UserService {
      */
     Customer loginPhAndPwd(AccountRequestDTO requestDTO);
 
+    /**
+     * 是否匿名用户
+     * @return
+     */
+    boolean isAnonymousUser();
+
+    /**
+     * 获取当前用户信息
+     * @return
+     */
+    Customer getCurrentUser();
+
 }
