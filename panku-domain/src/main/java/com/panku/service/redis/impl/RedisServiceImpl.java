@@ -1,6 +1,7 @@
 package com.panku.service.redis.impl;
 
 import com.panku.constant.CommonConstants;
+import com.panku.dto.redis.RedisUserInfoDTO;
 import com.panku.service.redis.RedisService;
 import com.panku.service.token.TokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,5 +75,28 @@ public class RedisServiceImpl implements RedisService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public boolean saveUserInfo(RedisUserInfoDTO userInfoDTO) {
+        String jwtToken = tokenService.getToken();
+        if (StringUtils.isEmpty(jwtToken)){
+            return false;
+        }
+        //用户信息存储map
+        Map<String, Object> userMap = new HashMap<>();
+        if (StringUtils.isNotEmpty(userInfoDTO.getUserId())){
+            userMap.put(CommonConstants.REDIS.USER_ID, userInfoDTO.getUserId());
+        }
+        if (StringUtils.isNotEmpty(userInfoDTO.getUserName())){
+            userMap.put(CommonConstants.REDIS.USER_NAME, userInfoDTO.getUserName());
+        }
+        if (StringUtils.isNotEmpty(userInfoDTO.getMobile())){
+            userMap.put(CommonConstants.REDIS.MOBILE, userInfoDTO.getMobile());
+        }
+        if (StringUtils.isNotEmpty(userInfoDTO.getEmail())){
+            userMap.put(CommonConstants.REDIS.EMAIL, userInfoDTO.getEmail());
+        }
+        return saveDataToRedis(CommonConstants.REDIS.REDIS_TOKEN_PREFIX + jwtToken, userMap);
     }
 }

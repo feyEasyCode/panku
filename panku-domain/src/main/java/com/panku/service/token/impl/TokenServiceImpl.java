@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.panku.util.JwtUtils.parserJWT;
+
 /**
  * @description:
  * @author: uaike
@@ -100,6 +102,25 @@ public class TokenServiceImpl  implements TokenService {
             }
         }
         return validateJWT;
+    }
+
+    @Override
+    public String getToken() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String jwtToken = "";
+        if(StringUtils.isNotEmpty(request.getHeader(CommonConstants.JWT.JWT_ID))) {
+            String jwt = String.valueOf(request.getHeader(CommonConstants.JWT.JWT_ID));
+            log.info("getJwtToken jwt:" + jwt);
+            this.validateJWT(jwt);
+            Claims claims = null;
+            try {
+                claims = parserJWT(jwt);
+                jwtToken = claims.get("jwtToken").toString();
+            } catch (Exception e) {
+                log.error("JWTUtil getValue error:" + e.getMessage());
+            }
+        }
+        return jwtToken;
     }
 
     @Override

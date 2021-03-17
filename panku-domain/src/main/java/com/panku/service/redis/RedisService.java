@@ -1,11 +1,6 @@
 package com.panku.service.redis;
 
-import com.panku.constant.CommonConstants;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
+import com.panku.dto.redis.RedisUserInfoDTO;
 
 /**
  * @description:
@@ -31,5 +26,8 @@ public interface RedisService {
      * @return
      */
     boolean saveDataAndSetExpire(String key, Object value, Long expireTime);
+
+
+    boolean saveUserInfo(RedisUserInfoDTO userInfoDTO);
 
 }
