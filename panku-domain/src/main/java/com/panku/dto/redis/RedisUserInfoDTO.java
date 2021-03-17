@@ -18,4 +18,5 @@ public class RedisUserInfoDTO {
 
     private String email;
 
+    private String jwtToken;
 }

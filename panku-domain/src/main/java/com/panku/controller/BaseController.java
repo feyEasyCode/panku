@@ -3,6 +3,7 @@ package com.panku.controller;
 import com.panku.constant.CommonConstants;
 import com.panku.dto.BaseRequestDTO;
 import com.panku.dto.TokenResponseDTO;
+import com.panku.dto.redis.RedisUserInfoDTO;
 import com.panku.service.redis.RedisService;
 import com.panku.service.token.TokenService;
 import com.panku.util.JwtUtils;
@@ -47,7 +48,9 @@ public class BaseController {
         Boolean jwtFlag = Boolean.FALSE;
         if (StringUtils.isNotEmpty(jwtToken)){
             String redisKey = CommonConstants.REDIS.REDIS_TOKEN_PREFIX + token;
-            jwtFlag = redisService.saveDataAndSetExpire(redisKey, "", TOKEN_EXPIRED_TIME);
+            RedisUserInfoDTO redisUserInfo = new RedisUserInfoDTO();
+            redisUserInfo.setJwtToken(token);
+            jwtFlag = redisService.saveUserInfo(redisUserInfo);
         }
         tokenService.validateJWT(jwtToken);
         responseDTO.setToken(token);

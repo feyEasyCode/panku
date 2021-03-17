@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -34,6 +35,20 @@ public class RedisServiceImpl implements RedisService {
 
     @Resource
     private TokenService tokenService;
+
+    @Override
+    public boolean saveJwt(String jwtToken) {
+        if (StringUtils.isEmpty(jwtToken)){
+            return false;
+        }
+        try {
+            redisTemplate.boundHashOps(CommonConstants.REDIS.REDIS_TOKEN_PREFIX + jwtToken);
+            return true;
+        } catch (Exception e) {
+            log.error("JWT save error:"+e.getMessage());
+        }
+        return false;
+    }
 
     @Override
     public boolean validateJWT() {
@@ -79,12 +94,18 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public boolean saveUserInfo(RedisUserInfoDTO userInfoDTO) {
-        String jwtToken = tokenService.getToken();
-        if (StringUtils.isEmpty(jwtToken)){
+        if (Objects.isNull(userInfoDTO)){
             return false;
+        }
+        String jwtToken = userInfoDTO.getJwtToken();
+        if (StringUtils.isEmpty(jwtToken)){
+            jwtToken = tokenService.getToken();
         }
         //用户信息存储map
         Map<String, Object> userMap = new HashMap<>();
+        if (StringUtils.isNotEmpty(userInfoDTO.getJwtToken())){
+            userMap.put(CommonConstants.REDIS.JWT_TOKEN, userInfoDTO.getJwtToken());
+        }
         if (StringUtils.isNotEmpty(userInfoDTO.getUserId())){
             userMap.put(CommonConstants.REDIS.USER_ID, userInfoDTO.getUserId());
         }
@@ -97,6 +118,22 @@ public class RedisServiceImpl implements RedisService {
         if (StringUtils.isNotEmpty(userInfoDTO.getEmail())){
             userMap.put(CommonConstants.REDIS.EMAIL, userInfoDTO.getEmail());
         }
-        return saveDataToRedis(CommonConstants.REDIS.REDIS_TOKEN_PREFIX + jwtToken, userMap);
+        redisTemplate.boundHashOps(CommonConstants.REDIS.REDIS_TOKEN_PREFIX + jwtToken).putAll(userMap);
+        return true;
+    }
+
+    @Override
+    public RedisUserInfoDTO getUserInfoByRedis() {
+        RedisUserInfoDTO userInfoDTO = new RedisUserInfoDTO();
+        String jwtToken = tokenService.getToken();
+        if (StringUtils.isEmpty(jwtToken)){
+            return null;
+        }
+        Map<String, Object> userMap = redisTemplate.opsForHash().entries(CommonConstants.REDIS.REDIS_TOKEN_PREFIX + jwtToken);
+        userInfoDTO.setUserId((String) userMap.get(CommonConstants.REDIS.USER_ID));
+        userInfoDTO.setUserId((String) userMap.get(CommonConstants.REDIS.USER_NAME));
+        userInfoDTO.setUserId((String) userMap.get(CommonConstants.REDIS.MOBILE));
+        userInfoDTO.setUserId((String) userMap.get(CommonConstants.REDIS.EMAIL));
+        return userInfoDTO;
     }
 }

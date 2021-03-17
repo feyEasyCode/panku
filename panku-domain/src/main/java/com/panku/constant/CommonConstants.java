@@ -21,5 +21,6 @@ public interface CommonConstants {
         String USER_NAME = "userName";
         String MOBILE = "mobile";
         String EMAIL = "email";
+        String JWT_TOKEN = "jwtToken";
     }
 }

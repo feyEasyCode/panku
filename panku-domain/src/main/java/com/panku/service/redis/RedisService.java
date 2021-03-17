@@ -9,6 +9,8 @@ import com.panku.dto.redis.RedisUserInfoDTO;
  */
 public interface RedisService {
 
+    boolean saveJwt(String jwtToken);
+
     boolean validateJWT();
     /**
      * 保存key-value 到redis
@@ -27,7 +29,15 @@ public interface RedisService {
      */
     boolean saveDataAndSetExpire(String key, Object value, Long expireTime);
 
-
+    /**
+     * 保存用户信息到redis
+     * @param userInfoDTO
+     * @return
+     */
     boolean saveUserInfo(RedisUserInfoDTO userInfoDTO);
 
+    /**
+     * 从redis获取用户信息
+     */
+    RedisUserInfoDTO getUserInfoByRedis();
 }
