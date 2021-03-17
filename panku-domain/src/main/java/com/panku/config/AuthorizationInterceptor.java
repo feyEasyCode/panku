@@ -1,12 +1,8 @@
 package com.panku.config;
 
 import com.google.common.net.HttpHeaders;
-import com.panku.constant.CommonConstants;
-import com.panku.service.redis.RedisService;
 import com.panku.service.token.TokenService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -24,12 +20,6 @@ import java.lang.reflect.Method;
 @Slf4j
 @Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
-
-    @Resource
-    private RedisService redisService;
-
-    @Resource
-    private RedisTemplate redisTemplate;
 
     @Resource
     private TokenService tokenService;
