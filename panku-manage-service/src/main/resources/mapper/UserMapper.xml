@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 此处与接口类地址对应 -->
+<mapper namespace="com.com.panku.dao.UserMapper">
+
+    <resultMap id="User" type="com.panku.entity.Customer">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="pass_word" property="passWord"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="address" property="address"/>
+        <result column="gender" property="gender"/>
+        <result column="head_img" property="headImg"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_status" property="userStatus"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <!-- 此处与接口方法名对应 指定参数类型与返回结果类型-->
+    <!--<select id="loginByPhAndPwd" resultMap="User">
+        SELECT * FROM users Where mobile=#{mobileNum} AND pass_word=#{passWord}
+    </select>-->
+</mapper>

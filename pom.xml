@@ -6,8 +6,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>panku-domain</module>
-        <module>panku-manage</module>
+        <module>panku-manage-service</module>
+        <module>panku-manage-front</module>
     </modules>
 
     <parent>
