@@ -5,16 +5,15 @@ export default {
     data() {
         return {
             loginForm: {
-                domains: [{
-                    value: ''
-                }],
-                email: ''
-            }
+            },
+          userData: {
+            name:''
+          }
         };
     },
     methods: {
         submitForm: function (formName) {
-            let _this = this;
+          let that = this;
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let url = "account/loginPhAndPwd"
@@ -23,19 +22,29 @@ export default {
                         "passWord": this.loginForm.password
                     }
                     postAPI(url, query).then(response => {
-                        this.form = response.data;
                         console.info(">>>>>REDS>>>>>>" + response.data.code)
                         if (response.data.code == "0") {
-                            _this.$router.push('HelloWorld');
+                          that.userData = response.data.data;
+                          if (!localStorage.getItem("userId",that.userData.userId)){
+                            localStorage.setItem("userId",that.userData.userId);
+                            localStorage.setItem("isLogin",0);
+                            localStorage.setItem('userInfo', JSON.stringify(that.userData));
+                          }
+                          that.$router.push({
+                            //path:'/HomeCommon',
+                            name: 'HomeCommon',
+                            params: {
+                              userData:that.userData
+                            }
+                          });
                         } else {
                           Message.error("登录异常")
                         }
                     }).catch(err => {
-                        console.log(err);
+                      Message.error("登录异常")
                     });
-                    alert(JSON.stringify(this.form))
                 } else {
-                    console.log('error submit!!');
+                    Message.error("登录异常")
                     return false;
                 }
             });

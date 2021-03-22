@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 此处与接口类地址对应 -->
-<mapper namespace="com.com.panku.dao.UserMapper">
+<mapper namespace="com.panku.dao.UserMapper">
 
     <resultMap id="User" type="com.panku.entity.Customer">
         <id column="id" property="id"/>
@@ -22,7 +22,7 @@
     </resultMap>
 
     <!-- 此处与接口方法名对应 指定参数类型与返回结果类型-->
-    <!--<select id="loginByPhAndPwd" resultMap="User">
+    <select id="loginByPhAndPwd" resultMap="User">
         SELECT * FROM users Where mobile=#{mobileNum} AND pass_word=#{passWord}
-    </select>-->
+    </select>
 </mapper>

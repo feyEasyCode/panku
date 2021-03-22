@@ -20,7 +20,7 @@ public interface UserMapper {
      * @param passWord
      * @return
      */
-    @Select(" SELECT * FROM users Where mobile=#{mobileNum} AND pass_word=#{passWord}")
+//    @Select(" SELECT * FROM users Where mobile=#{mobileNum} AND pass_word=#{passWord}")
     List<Customer> loginByPhAndPwd(String mobileNum, String passWord);
 
     /**

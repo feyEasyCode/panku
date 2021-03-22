@@ -4,9 +4,9 @@
     <el-container>
       <el-aside width="200px">Aside</el-aside>
       <el-main>
-        <el-form :model="loginForm" status-icon :rules="loginForm" ref="loginForm" label-width="100px" class="login-form">
+        <el-form :model="loginForm" ref="loginForm" label-width="100px" class="login-form">
           <el-form-item label="手机号" prop="mobile">
-            <el-input v-model.number="loginForm.mobile"></el-input>
+            <el-input type="mobile" v-model.number="loginForm.mobile"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input type="password" v-model="loginForm.password" autocomplete="off"></el-input>
@@ -57,7 +57,6 @@
 .el-aside {
   background-color: #FAFBFC;
   color: #333;
-  height: 1000px;
   text-align: center;
   line-height: 200px;
 }
@@ -71,6 +70,9 @@
 
 body > .el-container {
   margin-bottom: 40px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
 
 .el-container:nth-child(5) .el-aside,

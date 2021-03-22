@@ -42,7 +42,7 @@ service.interceptors.request.use(config => {
     //注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
     // const jwt = getCookie('名称');//这里取token之前，你肯定需要先拿到token,存一下
     const jwt = sessionStorage.getItem("jwt");
-    console.info(">>>>>>JWT" + jwt);
+    console.info(">>>>>>JWT>>>>>" + jwt);
     if(jwt){
         // config.params = {'jwt':jwt} //如果要求携带在参数中
         config.headers.jwt= jwt; //如果要求携带在请求头中
