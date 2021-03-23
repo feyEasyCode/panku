@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 此处与接口类地址对应 -->
+<mapper namespace="com.panku.dao.BreadcrumbMapper">
+    <resultMap id="Breadcrumb" type="com.panku.entity.Breadcrumb">
+        <id column="id" property="id"/>
+        <result column="breadcrumb_id" property="breadcrumbId"/>
+        <result column="breadcrumb_name" property="breadcrumbName"/>
+        <result column="level" property="level"/>
+        <result column="sort" property="sort"/>
+        <result column="url" property="url"/>
+        <result column="pid" property="pid"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+    <!-- 此处与接口方法名对应 指定参数类型与返回结果类型-->
+    <select id="queryBreadcrumb" resultMap="Breadcrumb">
+        select * from breadcrumb where status = 0;
+    </select>
+</mapper>
