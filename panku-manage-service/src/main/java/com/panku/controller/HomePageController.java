@@ -1,16 +1,26 @@
 package com.panku.controller;
 
 import com.panku.config.Authorization;
+import com.panku.config.RequiredLogin;
+import com.panku.dto.breadCrumb.BreadcrumbResponseDTO;
 import com.panku.entity.HomeCommon;
+import com.panku.service.breadcrumbService.BreadcrumbService;
+import com.panku.util.ResultResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+
 @Slf4j
 @RestController
-@RequestMapping("/common")
+@RequestMapping("/api/common")
 public class HomePageController {
+
+    @Resource
+    private BreadcrumbService breadcrumbService;
 
     @GetMapping("test")
     public String Home(){
@@ -29,6 +39,16 @@ public class HomePageController {
         homeCommon.setUrl("www.uaike.com");
         log.info("加入log注解");
         return homeCommon;
+    }
+
+    @Authorization
+    @RequiredLogin
+    @PostMapping("/queryBreadcrumb")
+    public ResultResponse queryBreadcrumb(){
+
+        BreadcrumbResponseDTO  responseDTO = breadcrumbService.queryBreadcrumb();
+
+        return ResultResponse.success(responseDTO);
     }
 
 }

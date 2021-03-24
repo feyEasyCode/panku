@@ -18,6 +18,6 @@
     </resultMap>
     <!-- 此处与接口方法名对应 指定参数类型与返回结果类型-->
     <select id="queryBreadcrumb" resultMap="Breadcrumb">
-        select * from breadcrumb where status = 0;
+        select * from breadcrumb where status = 0 ORDER BY level ASC;
     </select>
 </mapper>

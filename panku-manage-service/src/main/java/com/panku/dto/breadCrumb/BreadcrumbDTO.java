@@ -22,6 +22,8 @@ public class BreadcrumbDTO {
 
     private String url;
 
+    private String parentId;
+
     private List<BreadcrumbDTO> subBreadcrumb;
 
 }
