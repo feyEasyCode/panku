@@ -41,13 +41,15 @@ public class HomePageController {
         return homeCommon;
     }
 
+    /**
+     * 获取导航数据
+     * @return
+     */
     @Authorization
     @RequiredLogin
     @PostMapping("/queryBreadcrumb")
     public ResultResponse queryBreadcrumb(){
-
         BreadcrumbResponseDTO  responseDTO = breadcrumbService.queryBreadcrumb();
-
         return ResultResponse.success(responseDTO);
     }
 

@@ -1,7 +1,10 @@
 package com.panku.service.user;
 
 import com.panku.dto.account.request.AccountRequestDTO;
+import com.panku.dto.user.CustomerDTO;
 import com.panku.entity.Customer;
+
+import java.util.List;
 
 /**
  * @description:
@@ -28,5 +31,12 @@ public interface UserService {
      * @return
      */
     Customer getCurrentUser();
+
+
+    /**
+     * 获取所有用户数据
+     * @return
+     */
+    List<CustomerDTO> queryAllUsers();
 
 }

@@ -1,8 +1,10 @@
 package com.panku.controller;
 
 import com.panku.config.Authorization;
+import com.panku.config.RequiredLogin;
 import com.panku.dto.account.request.AccountRequestDTO;
 import com.panku.dto.redis.RedisUserInfoDTO;
+import com.panku.dto.user.CustomerDTO;
 import com.panku.entity.Customer;
 import com.panku.service.redis.RedisService;
 import com.panku.service.user.UserService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +43,17 @@ public class AccountController {
             return ResultResponse.success(customer);
         }
         return ResultResponse.error(1,"获取用户信息异常，登录失败");
+    }
+
+    @Authorization
+    @RequiredLogin
+    @PostMapping("/queryAllUsers")
+    public ResultResponse queryAllUsers(){
+        List<CustomerDTO> customers = userService.queryAllUsers();
+        if (Objects.nonNull(customers)){
+            return ResultResponse.success(customers);
+        }
+        return ResultResponse.error(1,"获取用户信息异常，请重试！");
     }
 
 

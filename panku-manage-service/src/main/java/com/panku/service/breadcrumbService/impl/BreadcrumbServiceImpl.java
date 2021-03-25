@@ -46,17 +46,19 @@ public class BreadcrumbServiceImpl implements BreadcrumbService {
         //根节点
         List<BreadcrumbDTO> rootMenu = new ArrayList<BreadcrumbDTO>();
         for (BreadcrumbDTO nav : breadcrumbls) {
-            if (nav.getParentId().equals( "0" )){ //父节点是0的，为根节点。
+            //父节点是0的，为根节点。
+            if (nav.getParentId().equals( "0" )){
                 rootMenu.add(nav);
             }
         }
-        /* 根据Menu类的order排序 */
+        //根据Menu类的order排序
         Collections.sort(rootMenu, order());
         //为根菜单设置子菜单，getClild是递归调用的
-        for (BreadcrumbDTO breadcrumb : breadcrumbls) {
-            /* 获取根节点下的所有子节点 使用getChild方法*/
+        for (BreadcrumbDTO breadcrumb : rootMenu) {
+            //获取根节点下的所有子节点 使用getChild方法
             List<BreadcrumbDTO> childList = getChild(breadcrumb.getBreadcrumbId(), breadcrumbls);
-            breadcrumb.setSubBreadcrumb(childList);//给根节点设置子节点
+            //给根节点设置子节点
+            breadcrumb.setSubBreadcrumb(childList);
         }
         breadcrumbResponseDTO.setBreadcrumbs(rootMenu);
         return breadcrumbResponseDTO;
@@ -82,7 +84,8 @@ public class BreadcrumbServiceImpl implements BreadcrumbService {
         for (BreadcrumbDTO nav : childList) {
             nav.setSubBreadcrumb(getChild(nav.getBreadcrumbId(), allMenu));
         }
-        Collections.sort(childList,order()); //排序
+        //排序
+        Collections.sort(childList,order());
         //如果节点下没有子节点，返回一个空List（递归退出）
         if (childList.size() == 0 ){
             return new ArrayList<BreadcrumbDTO>();

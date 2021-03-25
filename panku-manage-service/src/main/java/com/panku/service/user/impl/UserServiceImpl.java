@@ -3,6 +3,7 @@ package com.panku.service.user.impl;
 import com.panku.dao.UserMapper;
 import com.panku.dto.account.request.AccountRequestDTO;
 import com.panku.dto.redis.RedisUserInfoDTO;
+import com.panku.dto.user.CustomerDTO;
 import com.panku.entity.Customer;
 import com.panku.service.redis.RedisService;
 import com.panku.service.user.UserService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,5 +68,31 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return customers.get(0);
+    }
+
+
+    @Override
+    public List<CustomerDTO> queryAllUsers() {
+        List<Customer> customers = userMapper.queryAllUsers();
+        if (CollectionUtils.isEmpty(customers)){
+            return null;
+        }
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        for (Customer customer : customers){
+            CustomerDTO customerDTO = new CustomerDTO();
+            customerDTO.setUserId(customer.getUserId());
+            customerDTO.setName(customer.getName());
+            customerDTO.setEmail(customer.getEmail());
+            customerDTO.setMobile(customer.getMobile());
+            customerDTO.setHeadImg(customer.getHeadImg());
+            customerDTO.setCreateTime(customer.getCreateTime());
+            customerDTO.setModifiedTime(customer.getModifiedTime());
+            customerDTO.setAddress(customer.getAddress());
+            customerDTO.setGender(customer.getGender());
+            customerDTO.setUserType(customer.getUserType());
+            customerDTO.setUserStatus(customer.getUserStatus());
+            customerDTOS.add(customerDTO);
+        }
+        return customerDTOS;
     }
 }

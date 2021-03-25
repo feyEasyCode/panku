@@ -25,4 +25,8 @@
     <select id="loginByPhAndPwd" resultMap="User">
         SELECT * FROM users Where mobile=#{mobileNum} AND pass_word=#{passWord}
     </select>
+
+    <select id="queryAllUsers" resultMap="User">
+        SELECT * FROM users;
+    </select>
 </mapper>
