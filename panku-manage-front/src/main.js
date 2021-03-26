@@ -21,30 +21,18 @@ router.beforeEach(function (to, from, next) {
   /** 登录拦截（对以下 地址不做拦截） */
   let pathList = ['HomeLogin','token']
   let isLogin = localStorage.getItem('isLogin')
-  if (isLogin === '0' || to.path === 'HomeLogin' || to.path === 'token' || to.path === '/') {
-    next()
+  if (to.path === 'token' || to.path === '/HomeLogin') {
+      next()
   } else {
-    next({
-      path: '/'
-    })
+    if (isLogin === '0') {
+      next()
+    } else {
+      next({
+        path: '/HomeLogin'
+      })
+    }
   }
 })
-
-axios({
-  method: "POST",
-  url: "http://localhost:8080/token/getToken",
-  data: {
-  },
-  headers: {
-    'Content-Type': 'application/json'
-  }
-}).then(response => {
-  sessionStorage.setItem("jwt",response.data.data.jwt);
-  axios.defaults.headers.common['jwt'] = response.data.data.jwt
-}).catch(err => {
-  console.log(err);
-});
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

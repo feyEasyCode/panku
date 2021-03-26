@@ -10,6 +10,11 @@ export default new Router({
   mode:"history",
   routes: [
     {
+      path: '/',
+      name: 'HomeCommon',
+      component: HomeCommon
+    },
+    {
       path: '/HelloWorld',
       name: 'HelloWorld',
       component: HelloWorld
@@ -24,7 +29,7 @@ export default new Router({
       component: HomeCommon
     },
     {
-      path: '/',
+      path: '/HomeLogin',
       name: 'HomeLogin',
       component: HomeLogin
     }
