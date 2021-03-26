@@ -35,5 +35,6 @@ public class CustomerDTO {
 
     private Date modifiedTime;
 
+    private String jwt;
 
 }

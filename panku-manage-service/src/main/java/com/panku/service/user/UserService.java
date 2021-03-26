@@ -1,6 +1,7 @@
 package com.panku.service.user;
 
 import com.panku.dto.account.request.AccountRequestDTO;
+import com.panku.dto.account.response.LoginResponse;
 import com.panku.dto.user.CustomerDTO;
 import com.panku.entity.Customer;
 
@@ -18,7 +19,7 @@ public interface UserService {
      * @param requestDTO
      * @return
      */
-    Customer loginPhAndPwd(AccountRequestDTO requestDTO);
+    LoginResponse loginPhAndPwd(AccountRequestDTO requestDTO);
 
     /**
      * 是否匿名用户

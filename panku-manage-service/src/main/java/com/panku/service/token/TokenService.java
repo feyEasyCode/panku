@@ -1,5 +1,9 @@
 package com.panku.service.token;
 
+import com.panku.dto.BaseRequestDTO;
+import com.panku.dto.TokenResponseDTO;
+import com.panku.dto.redis.RedisUserInfoDTO;
+
 /**
  * @description:
  * @author: uaike
@@ -15,4 +19,5 @@ public interface TokenService {
 
     String getToken();
 
+    TokenResponseDTO generateToken(RedisUserInfoDTO requestDTO);
 }

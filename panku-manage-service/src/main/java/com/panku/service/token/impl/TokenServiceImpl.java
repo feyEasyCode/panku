@@ -1,13 +1,18 @@
 package com.panku.service.token.impl;
 
 import com.panku.constant.CommonConstants;
+import com.panku.dto.TokenResponseDTO;
+import com.panku.dto.redis.RedisUserInfoDTO;
+import com.panku.service.redis.RedisService;
 import com.panku.service.token.TokenService;
+import com.panku.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.core.util.UuidUtil;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -21,8 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.panku.util.JwtUtils.parserJWT;
 
 /**
  * @description:
@@ -39,6 +42,9 @@ public class TokenServiceImpl  implements TokenService {
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private RedisService redisService;
 
 
     @Override
@@ -138,6 +144,31 @@ public class TokenServiceImpl  implements TokenService {
             log.error("validate JWT error", e);
         }
         return flag;
+    }
+
+    @Override
+    public TokenResponseDTO generateToken(RedisUserInfoDTO requestDTO) {
+        TokenResponseDTO responseDTO = new TokenResponseDTO();
+        //生产随机数据
+        String token = UuidUtil.getTimeBasedUuid().toString().replace("-", "");
+        String jwtToken = null;
+        Boolean jwtFlag = Boolean.FALSE;
+        try {
+            jwtToken = JwtUtils.createJWT(token, requestDTO.getUserId());
+            log.info(">>>>>>>TOKEN>>>>>>" + token);
+            if (StringUtils.isNotEmpty(jwtToken)){
+                requestDTO.setJwtToken(token);
+                jwtFlag = redisService.saveUserInfo(requestDTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (jwtFlag){
+            responseDTO.setToken(token);
+            responseDTO.setJwt(jwtToken);
+            responseDTO.setExpireTime(18000);
+        }
+        return responseDTO;
     }
 
     /**

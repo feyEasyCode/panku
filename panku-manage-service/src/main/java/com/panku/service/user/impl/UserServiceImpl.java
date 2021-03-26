@@ -1,12 +1,18 @@
 package com.panku.service.user.impl;
 
+import com.panku.convertor.UserConvertor;
 import com.panku.dao.UserMapper;
+import com.panku.dto.BaseRequestDTO;
+import com.panku.dto.TokenResponseDTO;
 import com.panku.dto.account.request.AccountRequestDTO;
+import com.panku.dto.account.response.LoginResponse;
 import com.panku.dto.redis.RedisUserInfoDTO;
 import com.panku.dto.user.CustomerDTO;
 import com.panku.entity.Customer;
 import com.panku.service.redis.RedisService;
+import com.panku.service.token.TokenService;
 import com.panku.service.user.UserService;
+import com.panku.util.ResultResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -32,20 +38,29 @@ public class UserServiceImpl implements UserService {
     @Resource
     private RedisService redisService;
 
+    @Resource
+    private TokenService tokenService;
+
     @Override
-    public Customer loginPhAndPwd(AccountRequestDTO requestDTO){
+    public LoginResponse loginPhAndPwd(AccountRequestDTO requestDTO){
+        LoginResponse response = new LoginResponse();
         List<Customer> customers = userMapper.loginByPhAndPwd(requestDTO.getMobileNum(), requestDTO.getPassWord());
         if (CollectionUtils.isEmpty(customers) || customers.size()>1){
             return null;
         }
         //用户信息存入Redis
-        RedisUserInfoDTO userInfoDTO = redisService.getUserInfoByRedis();
-        userInfoDTO.setUserId(customers.get(0).getUserId());
-        userInfoDTO.setUserName(customers.get(0).getName());
-        userInfoDTO.setMobile(customers.get(0).getMobile());
-        userInfoDTO.setEmail(customers.get(0).getEmail());
-        redisService.saveUserInfo(userInfoDTO);
-        return customers.get(0);
+        CustomerDTO customer = UserConvertor.userConvertor(customers.get(0));
+        if (Objects.nonNull(customer)){
+            RedisUserInfoDTO userInfoDTO = new RedisUserInfoDTO();
+            userInfoDTO.setUserId(customer.getUserId());
+            userInfoDTO.setUserName(customer.getName());
+            userInfoDTO.setMobile(customer.getMobile());
+            userInfoDTO.setEmail(customer.getEmail());
+            TokenResponseDTO tokenResponseDTO = tokenService.generateToken(userInfoDTO);
+            response.setCustomer(customer);
+            response.setJwtToken(tokenResponseDTO);
+        }
+        return response;
     }
 
     @Override
@@ -79,18 +94,7 @@ public class UserServiceImpl implements UserService {
         }
         List<CustomerDTO> customerDTOS = new ArrayList<>();
         for (Customer customer : customers){
-            CustomerDTO customerDTO = new CustomerDTO();
-            customerDTO.setUserId(customer.getUserId());
-            customerDTO.setName(customer.getName());
-            customerDTO.setEmail(customer.getEmail());
-            customerDTO.setMobile(customer.getMobile());
-            customerDTO.setHeadImg(customer.getHeadImg());
-            customerDTO.setCreateTime(customer.getCreateTime());
-            customerDTO.setModifiedTime(customer.getModifiedTime());
-            customerDTO.setAddress(customer.getAddress());
-            customerDTO.setGender(customer.getGender());
-            customerDTO.setUserType(customer.getUserType());
-            customerDTO.setUserStatus(customer.getUserStatus());
+            CustomerDTO customerDTO = UserConvertor.userConvertor(customer);
             customerDTOS.add(customerDTO);
         }
         return customerDTOS;

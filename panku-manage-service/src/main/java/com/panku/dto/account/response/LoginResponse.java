@@ -1,5 +1,7 @@
 package com.panku.dto.account.response;
 
+import com.panku.dto.TokenResponseDTO;
+import com.panku.dto.user.CustomerDTO;
 import lombok.Data;
 
 /**
@@ -9,4 +11,9 @@ import lombok.Data;
  */
 @Data
 public class LoginResponse {
+
+    private CustomerDTO customer;
+
+    private TokenResponseDTO jwtToken;
+
 }
