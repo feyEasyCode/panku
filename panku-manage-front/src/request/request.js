@@ -7,10 +7,28 @@ import { Message} from 'element-ui';
 const service = axios.create({
     // 公共接口--这里注意后面会讲
     // baseURL: process.env.BASE_API,
-    baseURL: 'http://localhost:8080/',
+    baseURL: 'http://localhost:8081/',
     // 超时时间 单位是ms，这里设置了3s的超时时间
     timeout: 3 * 1000
 })
+
+// export function getToken(succ){
+//   axios({
+//     method: "POST",
+//     url: "http://localhost:8080/token/getToken",
+//     data: {
+//     },
+//     headers: {
+//       'Content-Type': 'application/json'
+//     }
+//   }).then(response => {
+//     localStorage.setItem("jwt",response.data.data.jwt);
+//     axios.defaults.headers.common['jwt'] = response.data.data.jwt
+//     succ && succ()
+//   }).catch(err => {
+//     console.log(err);
+//   });
+// }
 
 // 添加超时后的处理（axios中需要你根据error信息来进行判断）
 /*axios().catch(error => {
@@ -41,7 +59,7 @@ service.interceptors.request.use(config => {
     }
     //注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
     // const jwt = getCookie('名称');//这里取token之前，你肯定需要先拿到token,存一下
-    const jwt = sessionStorage.getItem("jwt");
+    const jwt = localStorage.getItem("jwt");
     console.info(">>>>>>JWT>>>>>" + jwt);
     if(jwt){
         // config.params = {'jwt':jwt} //如果要求携带在参数中
