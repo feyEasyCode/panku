@@ -29,4 +29,14 @@
     <select id="queryAllUsers" resultMap="User">
         SELECT * FROM users;
     </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.panku.entity.Customer">
+        INSERT INTO users(user_id,name,pass_word,mobile,email,address,gender,head_img,user_type,user_status)
+        VALUES (#{userId},#{name},#{passWord},#{mobile},#{email},#{address},#{gender},#{headImg},#{userType},#{userStatus})
+    </insert>
+
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM users WHERE user_id=#{user_id}
+    </delete>
+
 </mapper>

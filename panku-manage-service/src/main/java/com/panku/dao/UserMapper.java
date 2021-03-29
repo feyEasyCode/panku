@@ -41,6 +41,25 @@ public interface UserMapper {
     List<Customer> queryUserInfo(String userId);
 
 
-
+    /**
+     * 查询所有用户列表
+     * @return
+     */
     List<Customer> queryAllUsers();
+
+
+    /**
+     * 新增用户
+     * @param customer
+     * @return
+     */
+    int insertUser(Customer customer);
+
+
+    /**
+     * 删除用户
+     * @param userId
+     * @return
+     */
+    int deleteUser(String userId);
 }

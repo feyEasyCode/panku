@@ -2,17 +2,17 @@ package com.panku.service.user.impl;
 
 import com.panku.convertor.UserConvertor;
 import com.panku.dao.UserMapper;
-import com.panku.dto.BaseRequestDTO;
 import com.panku.dto.TokenResponseDTO;
 import com.panku.dto.account.request.AccountRequestDTO;
 import com.panku.dto.account.response.LoginResponse;
 import com.panku.dto.redis.RedisUserInfoDTO;
 import com.panku.dto.user.CustomerDTO;
 import com.panku.entity.Customer;
+import com.panku.service.commonservice.CommonService;
 import com.panku.service.redis.RedisService;
 import com.panku.service.token.TokenService;
 import com.panku.service.user.UserService;
-import com.panku.util.ResultResponse;
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private TokenService tokenService;
+
+    @Resource
+    private CommonService commonService;
 
     @Override
     public LoginResponse loginPhAndPwd(AccountRequestDTO requestDTO){
@@ -98,5 +101,39 @@ public class UserServiceImpl implements UserService {
             customerDTOS.add(customerDTO);
         }
         return customerDTOS;
+    }
+
+    @Override
+    public CustomerDTO addUser(CustomerDTO customerDTO) {
+        Customer customer = new Customer();
+        customer.setEmail(customerDTO.getEmail());
+        customer.setMobile(customerDTO.getMobile());
+        customer.setGender(customerDTO.getGender());
+        customer.setAddress(customerDTO.getAddress());
+        customer.setHeadImg(customerDTO.getHeadImg());
+        customer.setName(customerDTO.getName());
+        customer.setPassWord(customerDTO.getJwt());
+        customer.setUserType(customerDTO.getUserType());
+        customer.setUserStatus("0");
+        //获取数据库id
+        Long nextId = commonService.nextId();
+        Long memebr = 90000000L;
+        customer.setUserId(String.valueOf(nextId+memebr));
+        int result = userMapper.insertUser(customer);
+        if (result == 1 && customer.getId() != 0){
+            log.info(">>>>>>>INSERT RESULT >>>>>::" + result);
+            customerDTO.setUserId(customer.getUserId());
+            customerDTO.setJwt("");
+        }
+        return customerDTO;
+    }
+
+    @Override
+    public Boolean deleteUser(String userId) {
+        int result = userMapper.deleteUser(userId);
+        if (result>0){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

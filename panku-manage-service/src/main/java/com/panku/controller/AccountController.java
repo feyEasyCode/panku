@@ -48,5 +48,18 @@ public class AccountController {
         return ResultResponse.error(1,"获取用户信息异常，请重试！");
     }
 
+    /**
+     * 增加用户
+     * @return
+     */
+    @RequiredLogin
+    @PostMapping("/addUser")
+    public ResultResponse queryAllUsers(@RequestBody CustomerDTO customerDTO){
+
+        CustomerDTO customer = userService.addUser(customerDTO);
+
+        return ResultResponse.success(customer);
+    }
+
 
 }

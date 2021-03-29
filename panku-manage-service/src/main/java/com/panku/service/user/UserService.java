@@ -40,4 +40,18 @@ public interface UserService {
      */
     List<CustomerDTO> queryAllUsers();
 
+
+    /**
+     * 新增用户
+     * @param customerDTO
+     * @return
+     */
+    CustomerDTO addUser(CustomerDTO customerDTO);
+
+    /**
+     * 删除用户
+     * @param userId
+     * @return
+     */
+    Boolean deleteUser(String userId);
 }
