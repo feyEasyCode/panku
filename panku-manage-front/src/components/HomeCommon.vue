@@ -19,12 +19,12 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-            <el-submenu v-for="(breadcrumb,indexs) in breadcrumbs" :index="indexs">
+            <el-submenu v-for="(breadcrumb,indexs) in breadcrumbs" :index="indexs" :key="breadcrumb">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>{{breadcrumb.breadcrumbName}}</span>
               </template>
-              <el-menu-item-group v-for="(subBreadcrumb,index) in breadcrumb.subBreadcrumb">
+              <el-menu-item-group v-for="(subBreadcrumb,index) in breadcrumb.subBreadcrumb" :key="index">
                 <el-menu-item @click="queryAllUser(subBreadcrumb.url)" :index="indexs+'-'+index">{{subBreadcrumb.breadcrumbName}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
@@ -55,14 +55,6 @@ import {Message} from "element-ui";
 
 export default {
   name: 'HomeCommon',
-  created() {
-    this.getBreadcrumb()
-  },
-  watch: {
-    $route() {
-      this.getBreadcrumb()
-    }
-  },
   data () {
     return {
       userData: {},
@@ -73,6 +65,7 @@ export default {
   mounted () {
     // this.userData = this.$route.params.userData
     this.userData = JSON.parse(localStorage.getItem("userInfo"))
+    this.getBreadcrumb()
   },
   methods:{
     getBreadcrumb(){
