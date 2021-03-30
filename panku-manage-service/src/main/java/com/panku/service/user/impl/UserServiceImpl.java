@@ -136,4 +136,19 @@ public class UserServiceImpl implements UserService {
         }
         return Boolean.FALSE;
     }
+
+    @Override
+    public void updateUser(CustomerDTO customerDTO) {
+        Customer customer = new Customer();
+        customer.setEmail(customerDTO.getEmail());
+        customer.setMobile(customerDTO.getMobile());
+        customer.setGender(customerDTO.getGender());
+        customer.setAddress(customerDTO.getAddress());
+        customer.setHeadImg(customerDTO.getHeadImg());
+        customer.setName(customerDTO.getName());
+        customer.setPassWord(customerDTO.getJwt());
+        customer.setUserType(customerDTO.getUserType());
+        customer.setUserStatus("0");
+        userMapper.updateUser(customer);
+    }
 }

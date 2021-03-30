@@ -39,4 +39,32 @@
         DELETE FROM users WHERE user_id=#{user_id}
     </delete>
 
+    <update id="updateUser"  parameterType="com.panku.entity.Customer" >
+        update users
+        <trim prefix="set" suffixOverrides=",">
+            <if test='name !=null and name != ""'>
+                name = #{name, JdbcType=VARCHAR},
+            </if>
+            <if test='passWord !=null and passWord != ""'>
+                pass_word = #{passWord, JdbcType=VARCHAR},
+            </if>
+            <if test='mobile !=null and mobile != ""'>
+                mobile = #{mobile, JdbcType=VARCHAR},
+            </if>
+            <if test='email !=null and email != ""'>
+                email = #{email, JdbcType=VARCHAR},
+            </if>
+            <if test='address !=null and address != ""'>
+                address = #{address, JdbcType=VARCHAR},
+            </if>
+            <if test='gender !=null and gender != ""'>
+                gender = #{gender, JdbcType=VARCHAR},
+            </if>
+            <if test='headImg !=null and headImg != ""'>
+                head_img = #{headImg, JdbcType=VARCHAR},
+            </if>
+            where user_id = #{userId, jdbcType=VARCHAR}
+        </trim>
+    </update>
+
 </mapper>

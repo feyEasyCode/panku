@@ -61,5 +61,29 @@ public class AccountController {
         return ResultResponse.success(customer);
     }
 
+    /**
+     * 删除用户
+     * @param customerDTO
+     * @return
+     */
+    @RequiredLogin
+    @PostMapping("/deleteUser")
+    public ResultResponse deleteUser(@RequestBody CustomerDTO customerDTO){
+        Boolean result = userService.deleteUser(customerDTO.getUserId());
+        return ResultResponse.success(result);
+    }
+
+    /**
+     * 更新用户
+     * @param customerDTO
+     * @return
+     */
+    @RequiredLogin
+    @PostMapping("/updateUser")
+    public ResultResponse updateUser(@RequestBody CustomerDTO customerDTO){
+        userService.updateUser(customerDTO);
+        return ResultResponse.success();
+    }
+
 
 }

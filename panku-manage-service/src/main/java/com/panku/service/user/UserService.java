@@ -54,4 +54,11 @@ public interface UserService {
      * @return
      */
     Boolean deleteUser(String userId);
+
+
+    /**
+     * 更新用户信息
+     * @param customerDTO
+     */
+    void updateUser(CustomerDTO customerDTO);
 }

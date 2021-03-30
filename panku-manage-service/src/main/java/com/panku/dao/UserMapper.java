@@ -62,4 +62,10 @@ public interface UserMapper {
      * @return
      */
     int deleteUser(String userId);
+
+    /**
+     * 更新数据
+     * @param customer
+     */
+    void updateUser(Customer customer);
 }
