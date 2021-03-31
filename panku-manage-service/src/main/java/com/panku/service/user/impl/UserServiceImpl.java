@@ -130,17 +130,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean deleteUser(String userId) {
-        int result = userMapper.deleteUser(userId);
-        if (result>0){
-            return Boolean.TRUE;
+        try {
+            userMapper.deleteUser(userId);
+        } catch (Exception e){
+            log.info(">>>>>>DELETE USER EXCEPTION >>>>>::"+ userId);
+            return Boolean.FALSE;
         }
-        return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
     @Override
     public void updateUser(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setEmail(customerDTO.getEmail());
+        customer.setUserId(customerDTO.getUserId());
         customer.setMobile(customerDTO.getMobile());
         customer.setGender(customerDTO.getGender());
         customer.setAddress(customerDTO.getAddress());

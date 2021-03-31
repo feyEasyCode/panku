@@ -35,36 +35,36 @@
         VALUES (#{userId},#{name},#{passWord},#{mobile},#{email},#{address},#{gender},#{headImg},#{userType},#{userStatus})
     </insert>
 
-    <delete id="deleteUser" parameterType="int">
-        DELETE FROM users WHERE user_id=#{user_id}
+    <delete id="deleteUser">
+        DELETE FROM users WHERE user_id=#{userId}
     </delete>
 
     <update id="updateUser"  parameterType="com.panku.entity.Customer" >
         update users
         <trim prefix="set" suffixOverrides=",">
             <if test='name !=null and name != ""'>
-                name = #{name, JdbcType=VARCHAR},
+                name = #{name},
             </if>
             <if test='passWord !=null and passWord != ""'>
-                pass_word = #{passWord, JdbcType=VARCHAR},
+                pass_word = #{passWord},
             </if>
             <if test='mobile !=null and mobile != ""'>
-                mobile = #{mobile, JdbcType=VARCHAR},
+                mobile = #{mobile},
             </if>
             <if test='email !=null and email != ""'>
-                email = #{email, JdbcType=VARCHAR},
+                email = #{email},
             </if>
             <if test='address !=null and address != ""'>
-                address = #{address, JdbcType=VARCHAR},
+                address = #{address},
             </if>
             <if test='gender !=null and gender != ""'>
-                gender = #{gender, JdbcType=VARCHAR},
+                gender = #{gender},
             </if>
             <if test='headImg !=null and headImg != ""'>
-                head_img = #{headImg, JdbcType=VARCHAR},
+                head_img = #{headImg},
             </if>
-            where user_id = #{userId, jdbcType=VARCHAR}
         </trim>
+            where user_id = #{userId}
     </update>
 
 </mapper>

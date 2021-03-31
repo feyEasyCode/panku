@@ -61,7 +61,7 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    int deleteUser(String userId);
+    void deleteUser(String userId);
 
     /**
      * 更新数据
