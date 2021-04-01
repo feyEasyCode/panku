@@ -3,7 +3,8 @@
     <el-header style="height: 100px">
       <div>
         <div class="loginInfo">
-          <h2> 欢迎 ~ {{userData.name}}</h2>
+          <div>{{userData.name}}</div>
+          <div>退出</div>
         </div>
       </div>
     </el-header>
@@ -19,12 +20,12 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-            <el-submenu v-for="(breadcrumb,indexs) in breadcrumbs" :index="indexs" :key="breadcrumb">
+            <el-submenu v-for="(breadcrumb,indexs) in breadcrumbs" :index="'-'+indexs" :key="indexs">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>{{breadcrumb.breadcrumbName}}</span>
               </template>
-              <el-menu-item-group v-for="(subBreadcrumb,index) in breadcrumb.subBreadcrumb" :key="index">
+              <el-menu-item-group v-for="(subBreadcrumb,index) in breadcrumb.subBreadcrumb" :index="indexs+'-'+index" :key="indexs+'-'+index">
                 <el-menu-item @click="queryAllUser(subBreadcrumb.url)" :index="indexs+'-'+index">{{subBreadcrumb.breadcrumbName}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
@@ -42,6 +43,7 @@
               <el-breadcrumb-item>活动详情</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
+<!--          <UserList></UserList>-->
         </el-main>
       </el-container>
     </el-container>
@@ -52,9 +54,13 @@
 <script>
 import { postAPI } from "../api/api";
 import {Message} from "element-ui";
+import UserList from '../components/UserList.vue'
 
 export default {
   name: 'HomeCommon',
+  components:{
+    UserList,
+  },
   data () {
     return {
       userData: {},
