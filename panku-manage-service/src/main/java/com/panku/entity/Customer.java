@@ -1,9 +1,7 @@
 package com.panku.entity;
 
-import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
-import com.gitee.sunchenbin.mybatis.actable.annotation.IsAutoIncrement;
-import com.gitee.sunchenbin.mybatis.actable.annotation.IsKey;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.annotation.*;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +24,7 @@ public class Customer {
     @Column(comment = "用户ID")//对应数据库字段，不配置name会直接采用属性名作为字段名comment是注解
     private Long id;
 
+    @Unique
     @Column(name = "user_id", comment = "用户USER ID")
     private String userId;
 
@@ -35,9 +34,11 @@ public class Customer {
     @Column(name = "pass_word", comment = "用户密码")
     private String passWord;
 
+    @Unique
     @Column(comment = "手机号")
     private String mobile;
 
+    @Unique
     @Column(comment = "邮箱")
     private String email;
 
@@ -56,9 +57,9 @@ public class Customer {
     @Column(name = "user_status", comment = "账号状态")
     private String userStatus;
 
-    @Column(name = "create_time", comment = "创建时间")
+    @Column(name = "create_time", type = MySqlTypeConstant.TIMESTAMP, comment = "创建时间")
     private Date createTime;
 
-    @Column(name = "modified_time", comment = "修改时间")
+    @Column(name = "modified_time", type = MySqlTypeConstant.TIMESTAMP, comment = "修改时间")
     private Date modifiedTime;
 }

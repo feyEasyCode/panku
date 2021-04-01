@@ -12,7 +12,6 @@ import com.panku.service.commonservice.CommonService;
 import com.panku.service.redis.RedisService;
 import com.panku.service.token.TokenService;
 import com.panku.service.user.UserService;
-import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -105,16 +104,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CustomerDTO addUser(CustomerDTO customerDTO) {
-        Customer customer = new Customer();
-        customer.setEmail(customerDTO.getEmail());
-        customer.setMobile(customerDTO.getMobile());
-        customer.setGender(customerDTO.getGender());
-        customer.setAddress(customerDTO.getAddress());
-        customer.setHeadImg(customerDTO.getHeadImg());
-        customer.setName(customerDTO.getName());
-        customer.setPassWord(customerDTO.getJwt());
-        customer.setUserType(customerDTO.getUserType());
-        customer.setUserStatus("0");
+        Customer customer = this.setCustomer(customerDTO);
         //获取数据库id
         Long nextId = commonService.nextId();
         Long memebr = 90000000L;
@@ -141,6 +131,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(CustomerDTO customerDTO) {
+        Customer customer = this.setCustomer(customerDTO);
+        userMapper.updateUser(customer);
+    }
+
+
+    private Customer setCustomer(CustomerDTO customerDTO){
         Customer customer = new Customer();
         customer.setEmail(customerDTO.getEmail());
         customer.setUserId(customerDTO.getUserId());
@@ -151,7 +147,7 @@ public class UserServiceImpl implements UserService {
         customer.setName(customerDTO.getName());
         customer.setPassWord(customerDTO.getJwt());
         customer.setUserType(customerDTO.getUserType());
-        customer.setUserStatus("0");
-        userMapper.updateUser(customer);
+        customer.setUserStatus(customerDTO.getUserStatus());
+        return customer;
     }
 }

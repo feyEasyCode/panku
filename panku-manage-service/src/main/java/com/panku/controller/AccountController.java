@@ -55,9 +55,13 @@ public class AccountController {
     @RequiredLogin
     @PostMapping("/addUser")
     public ResultResponse queryAllUsers(@RequestBody CustomerDTO customerDTO){
-
-        CustomerDTO customer = userService.addUser(customerDTO);
-
+        CustomerDTO customer = null;
+        try {
+            customer = userService.addUser(customerDTO);
+        } catch (Exception e) {
+            log.error(">>>>>>>add user exception >>>>>", e);
+            return ResultResponse.error(e.getCause().getMessage());
+        }
         return ResultResponse.success(customer);
     }
 
@@ -81,7 +85,12 @@ public class AccountController {
     @RequiredLogin
     @PostMapping("/updateUser")
     public ResultResponse updateUser(@RequestBody CustomerDTO customerDTO){
-        userService.updateUser(customerDTO);
+        try {
+            userService.updateUser(customerDTO);
+        } catch (Exception e) {
+            log.error(">>>>>>>add user exception >>>>>", e);
+            return ResultResponse.error(e.getCause().getMessage());
+        }
         return ResultResponse.success();
     }
 
