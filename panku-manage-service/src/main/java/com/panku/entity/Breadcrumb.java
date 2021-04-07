@@ -41,6 +41,9 @@ public class Breadcrumb {
     @Column(name = "url", comment = "导航链接")
     private String url;
 
+    @Column(name = "path", comment = "路径")
+    private String path;
+
     @Column(name = "pid", comment = "主导航id")
     private String pid;
 

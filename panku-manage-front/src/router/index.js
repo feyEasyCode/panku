@@ -27,7 +27,18 @@ export default new Router({
     {
       path: '/HomeCommon',
       name: 'HomeCommon',
-      component: HomeCommon
+      component: HomeCommon,
+      children:[
+        {
+          path: '',
+          name: '',
+        },
+        {
+          path: 'LEFT_USERLIST_NAV',
+          name: 'LEFT_USERLIST_NAV',
+          component: UserList
+        }
+      ]
     },
     {
       path: '/HomeLogin',

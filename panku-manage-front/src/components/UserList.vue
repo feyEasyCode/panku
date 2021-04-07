@@ -7,6 +7,9 @@
       prop="headImg"
       label="头像"
       width="100">
+      <template width="90" slot-scope="scope">
+        <img style="width:60px;height:60px;border:none;" :src="scope.row.headImg">
+      </template>
     </el-table-column>
     <el-table-column
       prop="userId"

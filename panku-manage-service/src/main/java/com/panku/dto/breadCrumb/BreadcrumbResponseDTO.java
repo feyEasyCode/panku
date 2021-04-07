@@ -12,6 +12,6 @@ import java.util.List;
 @Data
 public class BreadcrumbResponseDTO {
 
-    private List<BreadcrumbDTO> breadcrumbs;
+    private List<RouterDTO> breadcrumbs;
 
 }

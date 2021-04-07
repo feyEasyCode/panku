@@ -23,10 +23,10 @@
             <el-submenu v-for="(breadcrumb,indexs) in breadcrumbs" :index="'-'+indexs" :key="indexs">
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span>{{breadcrumb.breadcrumbName}}</span>
+                <span>{{breadcrumb.routerName}}</span>
               </template>
-              <el-menu-item-group v-for="(subBreadcrumb,index) in breadcrumb.subBreadcrumb" :index="indexs+'-'+index" :key="indexs+'-'+index">
-                <el-menu-item @click="queryAllUser(subBreadcrumb.url)" :index="indexs+'-'+index">{{subBreadcrumb.breadcrumbName}}</el-menu-item>
+              <el-menu-item-group v-for="(subBreadcrumb, index) in breadcrumb.children" :index="indexs+'-'+index" :key="indexs+'-'+index">
+                <el-menu-item @click="queryAllUser(subBreadcrumb)" :index="indexs+'-'+index">{{subBreadcrumb.routerName}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -43,7 +43,7 @@
               <el-breadcrumb-item>活动详情</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-<!--          <UserList></UserList>-->
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
@@ -52,15 +52,8 @@
 </template>
 
 <script>
-import { postAPI } from "../api/api";
-import {Message} from "element-ui";
-import UserList from '../components/UserList.vue'
-
 export default {
   name: 'HomeCommon',
-  components:{
-    UserList,
-  },
   data () {
     return {
       userData: {},
@@ -68,39 +61,58 @@ export default {
       customers:{}
     }
   },
+  watch: {
+    // 当路由发生改变时执行
+    $route(to, from){
+      this.getBreadcrumb(this.breadcrumbs)
+    }
+  },
+
   mounted () {
-    // this.userData = this.$route.params.userData
     this.userData = JSON.parse(localStorage.getItem("userInfo"))
-    this.getBreadcrumb()
+    this.breadcrumbs = JSON.parse(window.localStorage.getItem("router"))
   },
   methods:{
-    getBreadcrumb(){
-      let url = "api/common/queryBreadcrumb";
-      let query = {};
-      postAPI(url, query).then(response => {
-        console.info(">>>>>queryBreadcrumb>>>>>>" + JSON.stringify(response.data.data))
-        if (response.data.code == "0") {
-          this.breadcrumbs = response.data.data.breadcrumbs;
-        } else {
-          Message.error("获取菜单数据异常")
-        }
-      }).catch(err => {
-        Message.error("获取菜单数据异常")
-      });
+    getBreadcrumb(item) {
+      debugger
+      // matched 包含当前路由的所有嵌套路径片段的路由记录<Array>
+      let matched = this.$route.matched.filter(item => item.name)
+      const first = matched[0]
+      // 默认显示Home,可根据项目自行调整
+      if (!this.isHome(first)) {
+        matched = [{ path: '/home', meta: { title: '首页' }}].concat(matched)
+      }
+      this.list = matched
     },
-    queryAllUser(urls){
-      let url = urls;
-      let query = {};
-      postAPI(url, query).then(res => {
-        console.info(">>>>>query All user>>>>>>" + JSON.stringify(res.data.data))
-        if (res.data.code == "0") {
-          this.customers = res.data.data;
-        } else {
-          Message.error("获取用户数据异常")
-        }
-      }).catch(err => {
-        Message.error("获取用户数据异常")
-      });
+    isHome(route) {
+      const name = route && route.name
+      if (!name) {
+        return false
+      }
+      return name.trim().toLocaleLowerCase() === 'Home'
+    },
+    handleLink(item) {
+      const { redirect, path } = item
+      // 优先执行redirect指定路径
+      if (redirect) {
+        this.$router.push(redirect)
+        return
+      }
+      this.$router.push(this.pathCompile(path))
+    },
+    pathCompile(path) {
+      // 解决面包屑不支持:id的方式 https://github.com/PanJiaChen/vue-element-admin/issues/561
+      const { params } = this.$route
+      const toPach = pathToRegexp.compile(path)
+      return toPach(params)
+    },
+    queryAllUser(item){
+      debugger
+      if (this.$router.history.current.name != item.name){
+        this.$router.push({
+          name: item.name
+        });
+      }
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
